@@ -3,7 +3,7 @@ from sqlalchemy import create_engine
 import pandas as pd
 import os
 import json
-import loguru
+from loguru import logger
 
 
 def calculate_time(method1):
@@ -17,6 +17,7 @@ def calculate_time(method1):
         result = method1(*args, **kwargs)
         end_ts = datetime.datetime.now()
         print("Total_time taken to load the function {}".format(end_ts-start_ts))
+        logger.log("Total_time taken to load the function {}".format(end_ts-start_ts))
         return result
     return wrapper
 
@@ -33,9 +34,11 @@ def udf_exception(method1):
             return result
         except Exception as e:
             print(e)
+            logger.exception("Exception details are {}",format(e))
     return wrapper
 
 
+@udf_exception
 def format_print(message, type_of_message="heading"):
     """
     This UDF is used to print formatted messages
@@ -51,6 +54,7 @@ def format_print(message, type_of_message="heading"):
         print("{}".format(message))
 
 
+@udf_exception
 def read_config():
     """
     This udf is used to load the config.json file and return the config connection
@@ -58,9 +62,11 @@ def read_config():
     """
     with open("../config/config.json") as f:
         config = json.load(f)
+    logger.add('Read config.json for connection details')
     return config['postgres']
 
 
+@udf_exception
 def create_postgres_connection():
     """
     This udf is used to connect to postgres
@@ -69,9 +75,11 @@ def create_postgres_connection():
     config_details = read_config()
     engine = create_engine("postgresql://{user}:{password}@{host}:{port}/{database}".format(**config_details))
     connection = engine.connect()
+    logger.add("connected to postgres is successful")
     return connection
 
 
+@udf_exception
 def read_file(filename, filetype, sheet_name=""):
     """
     This UDF is used to read data using pandas and return it using pandas dataframe
@@ -84,22 +92,61 @@ def read_file(filename, filetype, sheet_name=""):
         data = pd.read_csv("../data/{}".format(filename))
     elif filetype.upper() == "EXCEL":
         data = pd.read_excel("../data/{}".format(filename),sheet_name=sheet_name)
+    logger.info("read the file as pandas dataframe")
     return data
 
 
+@udf_exception
 def current_path():
     """
     This will find the current working directory
     :return: current working directory
     """
+    logger.log("found the current path")
     return os.path.dirname(os.path.realpath(__file__))
 
 
+@udf_exception
+def load_tables(table_name):
+    """
+    This udf provides details about the table details of the table name which is passed
+    :param table_name: Name of the Table to be loaded
+    :return: table details
+    """
+    with open("../scripts/load_details.json") as f:
+        table_details = json.load(f)
+    logger.log("found the load details of table")
+    return table_details[table_name]
+
+
+@udf_exception
 def logging():
-    pass
+    """
+    This is used to log the internal message into a file so that it can be used later for debugging purpose
+    :return: logger object
+    """
+    logger.add("../logs/load_data_to_RDS_instance.log",
+               level='INFO',
+               retention='10 days',
+               rotation='10 days')
+    return logger
+
+
+@udf_exception
+def load_data_into_table(data, table_name):
+    """
+    This UDF is used to load data into table
+    :param data: Source data
+    :param table_name: target table name
+    :return: True
+    """
+    table_details = load_tables(table_name)
+    connection = create_postgres_connection()
+    data.to_sql(table_name, if_exists="replace", index=False, con=connection)
+    logger.info("Loaded data into postgres table for {}".format(table_name))
+    return True
 
 
 if __name__ == "__main__":
     print(read_config())
-
 
