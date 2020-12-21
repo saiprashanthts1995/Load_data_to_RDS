@@ -16,9 +16,9 @@ This Repository contains coding to load data into database hosted in AWS using p
     i.e. add security group of EC2 instance in RDS instance.
 10. to install packages present in requirement.txt
 `sudo python3 -m pip install -r requirement.txt`
-Load of data seen from dbeaver is shown below ![] 
+Load of data seen from dbeaver is shown below ![]https://github.com/saiprashanthts1995/Load_data_to_RDS/blob/main/images/data_load_in_dbeaver.PNG
 
-Loading of data from EC2 instance is shown below ![] 
+Loading of data from EC2 instance is shown below ![]https://github.com/saiprashanthts1995/Load_data_to_RDS/blob/main/images/Load_data_into_ec2.PNG
 
 ## Repository contains the following scripts
 1. scripts/main.py
