@@ -1,4 +1,6 @@
-from utils import create_postgres_connection, format_print, logging, load_tables, read_file, calculate_time
+from utils import create_postgres_connection, \
+    format_print, logging, load_tables, read_file, \
+    calculate_time, load_data_into_table
 import argparse
 
 
@@ -21,7 +23,11 @@ def run(env):
         logger.info("Sample data is shown below for your reference")
         logger.info(data.head())
 
-        # connection to postgres
+        # connection to postgres and load data into table
+        logger.info("Load into RDS instance process begins")
+        load_data_into_table(data, table_name)
+        logger.info("Load into RDS instance process completed")
+
     else:
         print("First complete the development in dev environment and then move on :) ")
 
