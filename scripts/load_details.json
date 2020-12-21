@@ -1,8 +1,6 @@
 {
   "IRIS": {
-    "source_file_name" : "",
-    "target_table_name" : "",
-    "schema_name" : "",
-    "is_truncate" : "Yes"
+    "source_file_name" : "iris.csv",
+    "target_table_name" : "iris"
   }
 }
