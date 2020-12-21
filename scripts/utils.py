@@ -17,7 +17,7 @@ def calculate_time(method1):
         result = method1(*args, **kwargs)
         end_ts = datetime.datetime.now()
         print("Total_time taken to load the function {}".format(end_ts-start_ts))
-        logger.log("Total_time taken to load the function {}".format(end_ts-start_ts))
+        logger.info("Total_time taken to load the function {}".format(end_ts-start_ts))
         return result
     return wrapper
 
@@ -39,7 +39,7 @@ def udf_exception(method1):
 
 
 @udf_exception
-def format_print(message, type_of_message="heading"):
+def format_print(message, type_of_message="body"):
     """
     This UDF is used to print formatted messages
     :param message: User defined message as input
@@ -62,7 +62,7 @@ def read_config():
     """
     with open("../config/config.json") as f:
         config = json.load(f)
-    logger.add('Read config.json for connection details')
+    logger.add('Read config.json')
     return config['postgres']
 
 
@@ -102,7 +102,7 @@ def current_path():
     This will find the current working directory
     :return: current working directory
     """
-    logger.log("found the current path")
+    logger.info("found the current path")
     return os.path.dirname(os.path.realpath(__file__))
 
 
@@ -115,8 +115,8 @@ def load_tables(table_name):
     """
     with open("../scripts/load_details.json") as f:
         table_details = json.load(f)
-    logger.log("found the load details of table")
-    return table_details[table_name]
+    logger.info("found the load details of table")
+    return table_details[table_name.upper()]
 
 
 @udf_exception
@@ -149,4 +149,4 @@ def load_data_into_table(data, table_name):
 
 if __name__ == "__main__":
     print(read_config())
-
+    print(load_tables('iris'))
