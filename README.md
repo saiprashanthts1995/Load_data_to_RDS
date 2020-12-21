@@ -2,7 +2,7 @@
 This Repository contains coding to load data into database hosted in AWS using python
 
 
-## To install Python in Ec2 Instance
+## To install Python in EC2 Instance
 1. Open an EC2 Instance( Make sure to pick a one which falls inside the free tier)
 2. Connect to EC2 instance, this can be done by making an SSH connection.
 3. For the purpose of doing SSH, I have leveraged WinSCP as the tool.
