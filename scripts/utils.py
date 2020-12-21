@@ -2,6 +2,7 @@ import datetime
 from sqlalchemy import create_engine
 import pandas as pd
 import os
+import json
 
 
 def calculate_time(method1):
@@ -51,7 +52,7 @@ def format_print(message, type_of_message="heading"):
 
 def read_config():
     with open("../config/config.json") as f:
-        config = f.read()
+        config = json.load(f)
     return config['postgres']
 
 
