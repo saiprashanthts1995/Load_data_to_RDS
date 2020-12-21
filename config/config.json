@@ -2,7 +2,7 @@
   "postgres":
   {
     "user" : "practice",
-    "password" : "practice",
+    "password" : "",
     "port" : "5432",
     "host" : "",
     "database": "practice"
