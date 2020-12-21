@@ -3,6 +3,7 @@ from sqlalchemy import create_engine
 import pandas as pd
 import os
 import json
+import loguru
 
 
 def calculate_time(method1):
@@ -51,6 +52,10 @@ def format_print(message, type_of_message="heading"):
 
 
 def read_config():
+    """
+    This udf is used to load the config.json file and return the config connection
+    :return:postgres connection
+    """
     with open("../config/config.json") as f:
         config = json.load(f)
     return config['postgres']
@@ -83,8 +88,18 @@ def read_file(filename, filetype, sheet_name=""):
 
 
 def current_path():
+    """
+    This will find the current working directory
+    :return: current working directory
+    """
     return os.path.dirname(os.path.realpath(__file__))
+
+
+def logging():
+    pass
 
 
 if __name__ == "__main__":
     print(read_config())
+
+
