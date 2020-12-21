@@ -11,6 +11,13 @@ This Repository contains coding to load data into database hosted in AWS using p
 6. To install python3 in EC2 instance, execute the following command
 `sudo yum install python3`
 7. I have done the coding in pycharm and executed the SQL commands in Dbeaver.
+8. Make sure when EC2 instance is created add an IAM role to access RDS instance. This IAM role will be part of creation of EC2 instance
+9. IN RDS instance security group, add security group of EC2 instance with traffic as postgres (5432 port).
+    i.e. add security group of EC2 instance in RDS instance.
+
+Load of data seen from dbeaver is shown below ![] 
+
+Loading of data from EC2 instance is shown below ![] 
 
 ## Repository contains the following scripts
 1. scripts/main.py
